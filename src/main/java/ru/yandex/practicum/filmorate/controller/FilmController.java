@@ -15,6 +15,8 @@ import java.util.Map;
 @RequestMapping("/films")
 public class FilmController {
 
+    private int nextId = 1;
+
     private final Map<Long, Film> films = new HashMap<>();
 
     @GetMapping
@@ -52,11 +54,6 @@ public class FilmController {
 
     // вспомогательный метод для генерации идентификатора нового поста
     private long getNextId() {
-        long currentMaxId = films.keySet()
-                .stream()
-                .mapToLong(id -> id)
-                .max()
-                .orElse(0);
-        return ++currentMaxId;
+        return nextId++;
     }
 }

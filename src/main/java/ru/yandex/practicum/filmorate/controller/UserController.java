@@ -15,6 +15,8 @@ import java.util.Map;
 @RequestMapping("/users")
 public class UserController {
 
+    private int nextId = 1;
+
     private final Map<Long, User> users = new HashMap<>();
 
     @GetMapping
@@ -42,18 +44,13 @@ public class UserController {
             log.info("Пользователь {} обновлен", newUser);
             return newUser;
         } else {
-            log.warn("Пользователь с id = " + newUser.getId() + " не найден", newUser.getId());
+            log.warn("Пользователь с id = {} не найден", newUser.getId());
             throw new ValidationException("Пост с id = " + newUser.getId() + " не найден");
         }
     }
 
     // вспомогательный метод для генерации идентификатора нового поста
     private long getNextId() {
-        long currentMaxId = users.keySet()
-                .stream()
-                .mapToLong(id -> id)
-                .max()
-                .orElse(0);
-        return ++currentMaxId;
+        return nextId++;
     }
 }

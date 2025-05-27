@@ -9,13 +9,12 @@ import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class UserService {
 
-    private InMemoryUserStorage userStorage;
+    private final InMemoryUserStorage userStorage;
 
     public UserService(InMemoryUserStorage userStorage) {
         this.userStorage = userStorage;

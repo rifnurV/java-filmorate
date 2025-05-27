@@ -16,11 +16,9 @@ import java.util.Collection;
 public class FilmController {
 
     private final FilmService filmService;
-    private final UserService userService;
 
-    public FilmController(FilmService filmService, UserService userService) {
+    public FilmController(FilmService filmService) {
         this.filmService = filmService;
-        this.userService = userService;
     }
 
     @GetMapping

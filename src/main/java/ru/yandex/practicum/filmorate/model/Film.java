@@ -14,15 +14,4 @@ public class Film {
     private LocalDate releaseDate;
     private int duration;
     private Set<Long> usersLike = new HashSet<>();
-    private long rate;
-
-    public void addLikeFilms(long userId) {
-        usersLike.add(userId);
-        rate = usersLike.size();
-    }
-
-    public void deleteLikeFilms(long userId) {
-        usersLike.remove(userId);
-        rate = usersLike.size();
-    }
 }

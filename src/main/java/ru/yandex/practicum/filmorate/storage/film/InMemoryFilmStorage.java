@@ -62,19 +62,19 @@ public class InMemoryFilmStorage implements FilmStorage {
     public List<Film> findPopularFilms(int count) {
         return films.values()
                 .stream()
-                .sorted(Comparator.comparing(Film::getRate).reversed())
+                .sorted(Comparator.comparingInt((Film film) -> film.getUsersLike().size()).reversed())
                 .limit(count)
                 .collect(Collectors.toList());
     }
 
     @Override
     public void addLikeFilms(long id, long userId) {
-        films.get(id).addLikeFilms(userId);
+        films.get(id).getUsersLike().add(userId);
     }
 
     @Override
     public void deleteLikeFilms(long id, long userId) {
-        films.get(id).deleteLikeFilms(userId);
+        films.get(id).getUsersLike().remove(userId);
     }
 
     // вспомогательный метод для генерации идентификатора нового поста

@@ -6,5 +6,6 @@ import lombok.Data;
 public class Friendship {
     private Long id;
     private long userId;
-    private Long friendId;
+    private long friendId;
+    private boolean isFriend;
 }

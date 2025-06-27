@@ -50,35 +50,50 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
+    public boolean userExists(long id) {
+        return false;
+    }
+
+    @Override
+    public List<User> findAllFriends(long userId) {
+        return List.of();
+    }
+
+    @Override
     public List<User> findAllFriendsCommon(long userId, long otherId) {
-        ArrayList<User> commonFriendsArrayList = new ArrayList<>();
-        if (users.get(userId) == null || users.get(otherId) == null) {
-            return commonFriendsArrayList;
-        }
-        if (users.get(userId).getFriends() == null || users.get(otherId).getFriends() == null) {
-            return commonFriendsArrayList;
-        }
-        for (Long i : users.get(userId).getFriends()) {
-            for (Long j : users.get(otherId).getFriends()) {
-                if (i == j) {
-                    commonFriendsArrayList.add(users.get(i));
-                }
-            }
-        }
-        return commonFriendsArrayList;
+        return List.of();
     }
 
-    @Override
-    public void addFriend(long userId, long friendId) {
-        users.get(userId).getFriends().add(friendId);
-        users.get(friendId).getFriends().add(userId);
-    }
+//    @Override
+//    public List<User> findAllFriendsCommon(long userId, long otherId) {
+//        ArrayList<User> commonFriendsArrayList = new ArrayList<>();
+//        if (users.get(userId) == null || users.get(otherId) == null) {
+//            return commonFriendsArrayList;
+//        }
+//        if (users.get(userId).getFriends() == null || users.get(otherId).getFriends() == null) {
+//            return commonFriendsArrayList;
+//        }
+//        for (Long i : users.get(userId).getFriends()) {
+//            for (Long j : users.get(otherId).getFriends()) {
+//                if (i == j) {
+//                    commonFriendsArrayList.add(users.get(i));
+//                }
+//            }
+//        }
+//        return commonFriendsArrayList;
+//    }
 
-    @Override
-    public void deleteFriends(long userId, long friendId) {
-        users.get(userId).getFriends().remove(friendId);
-        users.get(friendId).getFriends().remove(userId);
-    }
+//    @Override
+//    public void addFriend(long userId, long friendId) {
+//        users.get(userId).getFriends().add(friendId);
+//        users.get(friendId).getFriends().add(userId);
+//    }
+//
+//    @Override
+//    public void deleteFriends(long userId, long friendId) {
+//        users.get(userId).getFriends().remove(friendId);
+//        users.get(friendId).getFriends().remove(userId);
+//    }
 
     // вспомогательный метод для генерации идентификатора нового поста
     private long getNextId() {

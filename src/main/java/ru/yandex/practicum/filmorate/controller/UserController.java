@@ -36,37 +36,42 @@ public class UserController {
     @GetMapping("/{id}/friends")
     @ResponseStatus(HttpStatus.OK)
     public List<User> findAllFriends(@PathVariable int id) {
+        log.info("Get all friends by userId: {} controller", id);
         return userService.findAllFriends(id);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
     @ResponseStatus(HttpStatus.OK)
     public List<User> findAllFriendsCommon(@PathVariable int id, @PathVariable int otherId) {
+        log.info("Get all friends by userId: {} and otherId {} controller", id, otherId);
         return userService.findAllFriendsCommon(id, otherId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@Valid @RequestBody User user) {
+        log.info("Создание пользователя контроллер: {}", user);
         return userService.create(user);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public User update(@Valid @RequestBody User newUser) {
+        log.info("Обновление пользователя контроллер: {}", newUser);
         return userService.update(newUser);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
     @ResponseStatus(HttpStatus.OK)
     public void addFriend(@Valid @RequestBody @PathVariable int id, @PathVariable int friendId) {
+        log.info("Add friend controller {} to user {}", friendId, id);
         userService.addFriend(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteFriends(@Valid @RequestBody @PathVariable int id, @PathVariable int friendId) {
+        log.info("Delete friend controller {} from user {}", friendId, id);
         userService.deleteFriends(id, friendId);
     }
-
 }

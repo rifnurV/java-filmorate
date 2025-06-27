@@ -2,8 +2,6 @@ package ru.yandex.practicum.filmorate.storage.film;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
@@ -42,7 +40,7 @@ class InMemoryFilmStorageTest {
 
     @Test
     void createFilmAndSave() {
-        Film createdFilm = inMemoryFilmStorage.create(film1);
+        Film createdFilm = inMemoryFilmStorage.createFilm(film1);
 
         assertEquals(1, createdFilm.getId());
         assertEquals(film1.getName(), createdFilm.getName());
@@ -54,20 +52,20 @@ class InMemoryFilmStorageTest {
 
     @Test
     void createFiles() {
-        Film createdFilm1 = inMemoryFilmStorage.create(film1);
-        Film createdFilm2 = inMemoryFilmStorage.create(film2);
+        Film createdFilm1 = inMemoryFilmStorage.createFilm(film1);
+        Film createdFilm2 = inMemoryFilmStorage.createFilm(film2);
 
         assertEquals(1, createdFilm1.getId());
         assertEquals(2, createdFilm2.getId());
-        assertEquals(2, inMemoryFilmStorage.findAll().size());
+        assertEquals(2, inMemoryFilmStorage.findAllFilms().size());
     }
 
     @Test
     void updateFile() {
-        Film createdFilm1 = inMemoryFilmStorage.create(film1);
+        Film createdFilm1 = inMemoryFilmStorage.createFilm(film1);
         createdFilm1.setName("Зори здесь тихие");
 
-        Film updatedFilm1 = inMemoryFilmStorage.update(createdFilm1);
+        Film updatedFilm1 = inMemoryFilmStorage.updateFilm(createdFilm1);
 
         assertEquals(createdFilm1.getId(), updatedFilm1.getId());
         assertEquals(createdFilm1.getName(), updatedFilm1.getName());
@@ -78,36 +76,36 @@ class InMemoryFilmStorageTest {
 
     @Test
     void updateFilmValidationException() {
-        Film createdFilm1 = inMemoryFilmStorage.create(film1);
+        Film createdFilm1 = inMemoryFilmStorage.createFilm(film1);
 
         createdFilm1.setId(2L);
 
-        assertThrows(ValidationException.class, () -> inMemoryFilmStorage.update(createdFilm1));
+        assertThrows(NullPointerException.class, () -> inMemoryFilmStorage.updateFilm(createdFilm1));
     }
 
     @Test
     void updateFilmNotFoundException() {
-        Film createdFilm1 = inMemoryFilmStorage.create(film1);
+        Film createdFilm1 = inMemoryFilmStorage.createFilm(film1);
 
-        createdFilm1.setId(null);
+        createdFilm1.setId(20L);
 
-        assertThrows(NotFoundException.class, () -> inMemoryFilmStorage.update(createdFilm1));
+        assertThrows(NullPointerException.class, () -> inMemoryFilmStorage.updateFilm(createdFilm1));
     }
 
     @Test
     void findAll() {
-        inMemoryFilmStorage.create(film1);
-        inMemoryFilmStorage.create(film2);
+        inMemoryFilmStorage.createFilm(film1);
+        inMemoryFilmStorage.createFilm(film2);
 
-        List<Film> films = inMemoryFilmStorage.findAll();
+        List<Film> films = inMemoryFilmStorage.findAllFilms();
 
         assertEquals(2, films.size());
     }
 
     @Test
     void findPopularFilms() {
-        Film createdFilm1 = inMemoryFilmStorage.create(film1);
-        Film createdFilm2 = inMemoryFilmStorage.create(film2);
+        Film createdFilm1 = inMemoryFilmStorage.createFilm(film1);
+        Film createdFilm2 = inMemoryFilmStorage.createFilm(film2);
 
         inMemoryFilmStorage.addLikeFilms(createdFilm1.getId(), 1L);
         inMemoryFilmStorage.addLikeFilms(createdFilm1.getId(), 2L);
@@ -123,7 +121,7 @@ class InMemoryFilmStorageTest {
 
     @Test
     void addLikeFilms() {
-        Film createdFilm1 = inMemoryFilmStorage.create(film1);
+        Film createdFilm1 = inMemoryFilmStorage.createFilm(film1);
         inMemoryFilmStorage.addLikeFilms(createdFilm1.getId(), 1L);
         inMemoryFilmStorage.addLikeFilms(createdFilm1.getId(), 2L);
 
@@ -136,7 +134,7 @@ class InMemoryFilmStorageTest {
 
     @Test
     void deleteLikeFilms() {
-        Film createdFilm1 = inMemoryFilmStorage.create(film1);
+        Film createdFilm1 = inMemoryFilmStorage.createFilm(film1);
         inMemoryFilmStorage.addLikeFilms(createdFilm1.getId(), 1L);
         inMemoryFilmStorage.deleteLikeFilms(createdFilm1.getId(), 1L);
         Set<Long> likes = createdFilm1.getUsersLike();

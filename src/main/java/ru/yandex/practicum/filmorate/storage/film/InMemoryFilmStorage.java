@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,12 +21,12 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Long, Film> films = new HashMap<>();
 
     @Override
-    public Optional<Film> getFilmById(long id) {
-        return Optional.ofNullable(films.get(id));
+    public Film getFilmById(long id) {
+        return films.get(id);
     }
 
     @Override
-    public Film create(@Valid @RequestBody Film film) {
+    public Film createFilm(@Valid @RequestBody Film film) {
         if (films.containsKey(film.getId())) {
             log.warn("Фильм {} с id {} уже был добавлен", film, film.getId());
         }
@@ -36,9 +37,9 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film update(@Valid @RequestBody Film newFilm) {
+    public Film updateFilm(@Valid @RequestBody Film newFilm) {
         // проверяем необходимые условия
-        if (newFilm.getId() == null) {
+        if (newFilm.getId() != films.get(newFilm.getId()).getId()) {
             log.warn("Не указан id для фильма {}", newFilm.getName());
             throw new NotFoundException("Id должен быть указан");
         }
@@ -53,13 +54,12 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> findAll() {
+    public List<Film> findAllFilms() {
         List<Film> filmsList = new ArrayList<>(films.values());
         log.info("Список фильмов сформирован");
         return filmsList;
     }
 
-    @Override
     public List<Film> findPopularFilms(int count) {
         return films.values()
                 .stream()
@@ -76,6 +76,16 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public void deleteLikeFilms(long id, long userId) {
         films.get(id).getUsersLike().remove(userId);
+    }
+
+    @Override
+    public boolean isContains(long id) {
+        return false;
+    }
+
+    @Override
+    public Set<Genre> getGenres(long filmId) {
+        return Set.of();
     }
 
     // вспомогательный метод для генерации идентификатора нового поста

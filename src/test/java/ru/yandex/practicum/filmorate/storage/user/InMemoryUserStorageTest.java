@@ -75,7 +75,7 @@ class InMemoryUserStorageTest {
     @Test
     void updateNotFoundException() {
         User userCreate1 = inMemoryUserStorage.create(user1);
-        userCreate1.setId(null);
+        userCreate1.setId(10L);
 
         assertThrows(NotFoundException.class, () -> inMemoryUserStorage.update(userCreate1));
     }
@@ -90,51 +90,4 @@ class InMemoryUserStorageTest {
         assertEquals(2, users.size());
     }
 
-    @Test
-    void findAllFriendsCommon() {
-        User userCreate1 = inMemoryUserStorage.create(user1);
-        User userCreate2 = inMemoryUserStorage.create(user2);
-        User userCreate3 = inMemoryUserStorage.create(user3);
-        User userCreate4 = inMemoryUserStorage.create(user4);
-
-        inMemoryUserStorage.addFriend(userCreate1.getId(), userCreate2.getId());
-        inMemoryUserStorage.addFriend(userCreate1.getId(), userCreate3.getId());
-
-        inMemoryUserStorage.addFriend(userCreate2.getId(), userCreate3.getId());
-        inMemoryUserStorage.addFriend(userCreate2.getId(), userCreate4.getId());
-
-        List<User> common = inMemoryUserStorage.findAllFriendsCommon(userCreate1.getId(), userCreate2.getId());
-
-        assertEquals(1, common.size());
-    }
-
-    @Test
-    void addFriend() {
-        User userCreate1 = inMemoryUserStorage.create(user1);
-        User userCreate2 = inMemoryUserStorage.create(user2);
-        User userCreate3 = inMemoryUserStorage.create(user3);
-
-        inMemoryUserStorage.addFriend(userCreate1.getId(), userCreate2.getId());
-        inMemoryUserStorage.addFriend(userCreate1.getId(), userCreate3.getId());
-
-        assertEquals(2, inMemoryUserStorage.findById(userCreate1.getId()).get().getFriends().size());
-
-
-    }
-
-    @Test
-    void deleteFriends() {
-        User userCreate1 = inMemoryUserStorage.create(user1);
-        User userCreate2 = inMemoryUserStorage.create(user2);
-        User userCreate3 = inMemoryUserStorage.create(user3);
-
-        inMemoryUserStorage.addFriend(userCreate1.getId(), userCreate2.getId());
-        inMemoryUserStorage.addFriend(userCreate1.getId(), userCreate3.getId());
-
-        inMemoryUserStorage.deleteFriends(userCreate1.getId(), userCreate2.getId());
-        assertEquals(1, inMemoryUserStorage.findById(userCreate1.getId()).get().getFriends().size());
-
-        inMemoryUserStorage.deleteFriends(userCreate1.getId(), userCreate3.getId());
-        assertEquals(0, inMemoryUserStorage.findById(userCreate1.getId()).get().getFriends().size());
-    }
 }
